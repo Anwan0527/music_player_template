@@ -51,14 +51,13 @@ struct HomeIndex {
 
   async aboutToAppear() {
     // 从首选项加载数据
-    const preferences: PreferencesClass = new PreferencesClass(getContext(this))
-    this.playState = preferences.getPlayState()
+    // const preferences: PreferencesClass = new PreferencesClass(getContext(this))
+    // this.playState = preferences.getPlayState()
     // 从播放器订阅
     emitter.on({ eventId: EmitEventType.UPDATE_STATE }, (data) => {
       // 传递数据最好是以字符串的数据结构进行传递
       this.playState = new PlayStateTypeModel(data.data as PlayStateType)
     })
-
   }
 
   build() {

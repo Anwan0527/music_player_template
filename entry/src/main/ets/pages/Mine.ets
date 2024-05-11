@@ -8,18 +8,20 @@ import AVPlayerClass from '../utils/AVPlayerClass'
 struct Mine {
   columnList: number[] = [0, 1, 2, 3]
   @Link
-  playState:PlayStateType
+  playState: PlayStateType
+
   build() {
     Column() {
       // 背景
-      Column() {
-        GridRow({ gutter: 8 }) {
-          ForEach(this.columnList, (item:number) => {
-            GridCol({ span: 3 }) {
-              SongCard({columnIndex: item,playState:$playState })
-            }
-          })
-        }
+      Row({ space: 10 }) {
+        SongCard({ columnIndex: 0, playState: $playState })
+          .layoutWeight(1)
+        SongCard({ columnIndex: 1, playState: $playState })
+          .layoutWeight(1)
+        SongCard({ columnIndex: 2, playState: $playState })
+          .layoutWeight(1)
+        SongCard({ columnIndex: 3, playState: $playState })
+          .layoutWeight(1)
       }
       .scale({
         x: 1.15,
@@ -30,6 +32,7 @@ struct Mine {
       .height('75%')
       .width('100%')
       .backgroundColor('#000')
+
       // 个人信息
       Column() {
         Column() {
@@ -103,13 +106,15 @@ struct Mine {
 struct SongCard {
   columnIndex: number = 0
   @Link
-  playState:PlayStateType
+  playState: PlayStateType
   @State
   showList: songItemType[] = []
+
   aboutToAppear() {
     this.showList = songs.map(item => new songItemTypeModel(item))
       .sort(() => Math.random() - 0.5)
   }
+
   build() {
     List({ space: 12 }) {
       ForEach(this.showList, (item: songItemType) => {
@@ -117,27 +122,27 @@ struct SongCard {
           Stack() {
             Image(item.img)
               .width('100%')
-              // 播放中动图
-              Row() {
-                Image($r('app.media.ic_playing'))
-                  .width('50%')
-              }
-              .backgroundColor('#7a000000')
-              .width('100%')
-              .height('100%')
-              .justifyContent(FlexAlign.Center)
-              .visibility(this.playState?.url===item.url&&this.playState?.isPlay?Visibility.Visible:Visibility.Hidden)
+            // 播放中动图
+            Row() {
+              Image($r('app.media.ic_playing'))
+                .width('50%')
+            }
+            .backgroundColor('#7a000000')
+            .width('100%')
+            .height('100%')
+            .justifyContent(FlexAlign.Center)
+            .visibility(this.playState?.url === item.url && this.playState?.isPlay ? Visibility.Visible : Visibility.Hidden)
 
           }
           .width('100%')
           .aspectRatio(1)
           .borderRadius(8)
           .clip(true)
-          .onClick(()=>{
+          .onClick(() => {
             //点击的卡片的歌曲和当前播放的歌曲是不是同一首歌曲
-            if(this.playState.url === item.url){
-              this.playState.isPlay?AVPlayerClass.pause():AVPlayerClass.singlePlay(item)
-            }else{
+            if (this.playState.url === item.url) {
+              this.playState.isPlay ? AVPlayerClass.pause() : AVPlayerClass.singlePlay(item)
+            } else {
               AVPlayerClass.singlePlay(item)
             }
           })

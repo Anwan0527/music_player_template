@@ -69,7 +69,7 @@ export default class AudioRender {
   }
 
   static stop() {
-    AudioRender.renderer.stop()
+    AudioRender.renderer?.stop()
   }
   static pause() {
     AudioRender.renderer.pause()

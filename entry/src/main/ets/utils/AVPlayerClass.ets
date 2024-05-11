@@ -57,7 +57,7 @@ export default class AVPlayerClass {
     await AVPlayerClass.preferences.setPlayState(playState)
     // 监听卡片发送的事件
     SubscriberClass.subscribe(PublishEventType.CARD_PUBLISH, AVPlayerClass.cardSubscriber, (event) => {
-      switch (event){
+      switch (event) {
         case 'next':
           AVPlayerClass.playNext()
           break
@@ -82,8 +82,7 @@ export default class AVPlayerClass {
           break
       //   准备状态
         case 'prepared':
-          AVPlayerClass.player.seek(AVPlayerClass.time)
-        // AVPlayerClass.player.play()
+          AVPlayerClass.player.play()
           break
       // paused周期不稳定，和update冲突
       // case 'paused':
@@ -114,16 +113,15 @@ export default class AVPlayerClass {
     //  监听播放器的播放时长
     AVPlayerClass.player.on('timeUpdate', async (time) => {
       // 防止seek走0秒update
-      if (time === 0) return
       AVPlayerClass.time = time
       // 发布出去
-      await AVPlayerClass.updateState()
+      AVPlayerClass.updateState()
     })
     //  监听设置播放时长
-    AVPlayerClass.player.on('seekDone', () => {
-      AVPlayerClass.isPlay = true
-      AVPlayerClass.player.play()
-    })
+    // AVPlayerClass.player.on('seekDone', () => {
+    //   AVPlayerClass.isPlay = true
+    //   AVPlayerClass.player.play()
+    // })
 
 
   }
@@ -142,7 +140,9 @@ export default class AVPlayerClass {
           await AVPlayerClass.changePlay(song.url)
         } else {
           // 继续播放(设置播放器到指定的时间)
-          await AVPlayerClass.player.seek(AVPlayerClass.time)
+          // await AVPlayerClass.player.seek(AVPlayerClass.time)
+          AVPlayerClass.player.play()
+          AVPlayerClass.isPlay = true
         }
       }
       else {
@@ -162,10 +162,11 @@ export default class AVPlayerClass {
       AVPlayerClass.playList.unshift(song)
       AVPlayerClass.playIndex = 0
       AVPlayerClass.time = 0
-      await AVPlayerClass.changePlay(song.url)
+      AVPlayerClass.changePlay(song.url)
     }
     //   通知卡片
     AVPlayerClass.updateCard(song.img)
+
   }
 
   // 3.发布信息
@@ -189,7 +190,7 @@ export default class AVPlayerClass {
     })
     //   通知首选项
     // 回写首选项(更新强杀后的播放状态)
-    await AVPlayerClass.preferences.setPlayState(data)
+    // await AVPlayerClass.preferences.setPlayState(data)
     //   通知控制中心
     await AVSessionClass.setAVPlaybackState()
     //   通知卡片

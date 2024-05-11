@@ -30,7 +30,7 @@ struct Play {
   })
 
   // // 控制页面按钮是否能点击
-  @State btnEnable: boolean = true
+  // @State btnEnable: boolean = true
   // 时长数字(ms)转字符串
   number2time(number: number) {
     const ms: number = number % 1000
@@ -79,14 +79,14 @@ struct Play {
 
   async aboutToAppear() {
     // 从首选项加载数据
-    const preferences: PreferencesClass = new PreferencesClass(getContext(this))
-    this.playState = preferences.getPlayState()
+    // const preferences: PreferencesClass = new PreferencesClass(getContext(this))
+    // this.playState = preferences.getPlayState()
     // 从播放器订阅
     emitter.on({ eventId: EmitEventType.UPDATE_STATE }, (data) => {
       // 传递数据最好是以字符串的数据结构进行传递
       this.playState = new PlayStateTypeModel(data.data as PlayStateType)
       // 这里代表播放器已经处理了我的指令了
-      this.btnEnable = true
+      // this.btnEnable = true
       if ((data.data as PlayStateType).isPlay) {
         this.animatorResult.play()
       } else {
@@ -261,8 +261,8 @@ struct Play {
                   .trackColor('#ccc5c5c5')
                   .trackThickness(2)
                   .onChange((val) => {
-                    if (!this.btnEnable) return
-                    this.btnEnable = false
+                    // if (!this.btnEnable) return
+                    // this.btnEnable = false
                     AVPlayerClass.player.seek(val)
                   })
                 Text(this.number2time(this.playState.duration))
@@ -279,8 +279,8 @@ struct Play {
                     .fillColor(Color.White)
                     .width(30)
                     .onClick(() => {
-                      if (!this.btnEnable) return
-                      this.btnEnable = false
+                      // if (!this.btnEnable) return
+                      // this.btnEnable = false
                       AVPlayerClass.playMode = 'repeat'
                     })
                 } else if (this.playState.playMode === 'repeat') {
@@ -288,8 +288,8 @@ struct Play {
                     .fillColor(Color.White)
                     .width(30)
                     .onClick(() => {
-                      if (!this.btnEnable) return
-                      this.btnEnable = false
+                      // if (!this.btnEnable) return
+                      // this.btnEnable = false
                       AVPlayerClass.playMode = 'random'
                     })
                 } else if (this.playState.playMode === 'random') {
@@ -297,8 +297,8 @@ struct Play {
                     .fillColor(Color.White)
                     .width(30)
                     .onClick(() => {
-                      if (!this.btnEnable) return
-                      this.btnEnable = false
+                      // if (!this.btnEnable) return
+                      // this.btnEnable = false
                       AVPlayerClass.playMode = 'random'
                     })
                 }
@@ -307,8 +307,8 @@ struct Play {
                   .fillColor(Color.White)
                   .width(30)
                   .onClick(() => {
-                    if (!this.btnEnable) return
-                    this.btnEnable = false
+                    // if (!this.btnEnable) return
+                    // this.btnEnable = false
                     AVPlayerClass.playPrevious()
                   })
 
@@ -318,8 +318,8 @@ struct Play {
                   .width(50)
                   .onClick(() => {
                     // 如果能点才执行逻辑
-                    if (!this.btnEnable) return
-                    this.btnEnable = false
+                    // if (!this.btnEnable) return
+                    // this.btnEnable = false
                     this.playState.isPlay ? AVPlayerClass.pause() : AVPlayerClass.singlePlay(this.playState.playList[this.playState.playIndex])
                   })
                 // 下一首
@@ -327,8 +327,8 @@ struct Play {
                   .fillColor(Color.White)
                   .width(30)
                   .onClick(() => {
-                    if (!this.btnEnable) return
-                    this.btnEnable = false
+                    // if (!this.btnEnable) return
+                    // this.btnEnable = false
                     AVPlayerClass.playNext()
                   })
                 // 播放列表
