@@ -1,0 +1,13 @@
+{
+  "src": [
+    "pages/Index",
+    "pages/Start",
+    "pages/Recommend",
+    "pages/Find",
+    "pages/Moment",
+    "pages/SongList",
+    "pages/Mine",
+    "pages/Play",
+    "pages/Sing"
+  ]
+}
