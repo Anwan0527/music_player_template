@@ -1,6 +1,6 @@
-import { songs } from '../constants'
-import {songItemType} from '../models'
-import AVPlayerClass from '../utils/AVPlayerClass'
+import { songs } from '../../constants/index'
+import {songItemType} from '../../models/index'
+import AVPlayerClass from '../../utils/AVPlayerClass'
 
 @Entry
 @Component

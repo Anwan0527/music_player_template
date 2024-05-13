@@ -1,10 +1,10 @@
 import emitter from '@ohos.events.emitter'
 import { AnimatorResult } from '@ohos.animator'
-import { EmitEventType } from '../constants/EventContants'
-import { songItemType } from '../models/music'
-import { defaultState, PlayStateType, PlayStateTypeModel } from '../models/playState'
-import AVPlayerClass from '../utils/AVPlayerClass'
-import { PreferencesClass } from '../utils/PreferencesClass'
+import { EmitEventType } from '../../constants/EventContants'
+import { songItemType } from '../../models/music'
+import { defaultState, PlayStateType, PlayStateTypeModel } from '../../models/playState'
+import AVPlayerClass from '../../utils/AVPlayerClass'
+import { PreferencesClass } from '../../utils/PreferencesClass'
 import animator from '@ohos.animator';
 import router from '@ohos.router'
 

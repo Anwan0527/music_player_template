@@ -1,7 +1,7 @@
-import { songs } from '../constants/MusicConstants'
-import { songItemType, songItemTypeModel } from '../models/music'
-import { PlayStateType } from '../models/playState'
-import AVPlayerClass from '../utils/AVPlayerClass'
+import { songs } from '../../constants/MusicConstants'
+import { songItemType, songItemTypeModel } from '../../models/music'
+import { PlayStateType } from '../../models/playState'
+import AVPlayerClass from '../../utils/AVPlayerClass'
 
 @Entry
 @Component

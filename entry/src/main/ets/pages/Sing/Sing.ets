@@ -1,12 +1,12 @@
 import { emitter } from '@kit.BasicServicesKit'
 import animator, { AnimatorResult } from '@ohos.animator';
-import AudioCapturer from '../utils/AudioCapturer'
+import AudioCapturer from '../../utils/AudioCapturer'
 import { util } from '@kit.ArkTS'
-import AVPlayerClass from '../utils/AVPlayerClass';
-import AudioRender from '../utils/AudioRender';
+import AVPlayerClass from '../../utils/AVPlayerClass';
+import AudioRender from '../../utils/AudioRender';
 import display from '@ohos.display';
 import { promptAction } from '@kit.ArkUI';
-import { PlayStateType } from '../models/playState';
+import { PlayStateType } from '../../models/playState';
 
 interface lyricType {
   start: number

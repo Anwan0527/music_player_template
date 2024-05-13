@@ -1,5 +1,5 @@
-import { swiperList, recommendList, dailyRecommend } from '../constants'
-import { recommendListType, recommendDailyType } from '../models'
+import { swiperList, recommendList, dailyRecommend } from '../../constants/index'
+import { recommendListType, recommendDailyType } from '../../models/index'
 
 @Entry
 @Component

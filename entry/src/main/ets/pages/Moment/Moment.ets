@@ -1,6 +1,6 @@
-import { momentList } from '../constants'
-import { momentListType } from '../models'
-import AVPlayerClass from '../utils/AVPlayerClass'
+import { momentList } from '../../constants/index'
+import { momentListType } from '../../models/index'
+import AVPlayerClass from '../../utils/AVPlayerClass'
 
 @Entry
 @Component

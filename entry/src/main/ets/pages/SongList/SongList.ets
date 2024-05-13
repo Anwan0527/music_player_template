@@ -1,7 +1,7 @@
-import { favoriteList } from '../constants'
-import { songItemType } from '../models'
+import { favoriteList } from '../../constants/index'
+import { songItemType } from '../../models/index'
 import { router } from '@kit.ArkUI'
-import AVPlayerClass from '../utils/AVPlayerClass'
+import AVPlayerClass from '../../utils/AVPlayerClass'
 @Entry
 @Component
 struct SongList {

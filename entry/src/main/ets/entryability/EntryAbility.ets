@@ -24,8 +24,8 @@ export default class EntryAbility extends UIAbility {
       .bottomRect.height))
     const childWin = await windowStage.createSubWindow("ad_win") // 创建广告子窗口
     await childWin.showWindow()
-    await childWin.setUIContent("pages/Start")
-    windowStage.loadContent("pages/Index")
+    await childWin.setUIContent("pages/Start/Start")
+    windowStage.loadContent("pages/Index/Index")
   }
 
   onWindowStageDestroy(): void {
