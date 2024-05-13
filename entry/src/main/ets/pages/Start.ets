@@ -1,4 +1,5 @@
 import router from '@ohos.router'
+import { window } from '@kit.ArkUI'
 
 @Entry
 @Component
@@ -10,9 +11,7 @@ struct Advertisement {
     this.timer = setInterval(() => {
       if (this.time <= 0) {
         clearInterval(this.timer)
-        router.replaceUrl({
-          url: 'pages/Index'
-        })
+        window.findWindow("ad_win").destroyWindow()
         return
       }
       this.time -= 1
@@ -25,20 +24,9 @@ struct Advertisement {
 
   build() {
     Stack({ alignContent: Alignment.TopEnd }) {
-      Row() {
-      }
-      .width('100%')
-      .height('100%')
-      .backgroundImage($r('app.media.ad'))
-      .backgroundImageSize({
-        width: '100%',
-        height: '100%'
-      })
       Button(`跳过${this.time}`)
         .onClick(() => {
-          router.replaceUrl({
-            url: 'pages/Index'
-          })
+          window.findWindow("ad_win").destroyWindow()
         })
         .margin(12)
         .backgroundColor('#ccc')
@@ -46,5 +34,14 @@ struct Advertisement {
     }
     .width('100%')
     .height('100%')
+    .backgroundImage($r('app.media.ad'))
+    .backgroundImageSize({
+      width: '100%',
+      height: '100%'
+    })
+    .padding({
+      top: AppStorage.get("topHeight"),
+      bottom: AppStorage.get("bottomHeight")
+    })
   }
 }

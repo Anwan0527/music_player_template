@@ -96,7 +96,7 @@ struct Mine {
       }
       .width('100%')
       .height('25%')
-      .backgroundColor('#121215')
+      .backgroundColor('#3c3f41')
     }
     .width('100%')
   }

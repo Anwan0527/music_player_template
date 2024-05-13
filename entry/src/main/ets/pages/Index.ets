@@ -10,7 +10,6 @@ import PlayerNav from '../components/playerNav'
 import emitter from '@ohos.events.emitter'
 import { EmitEventType } from '../constants/EventContants'
 import { defaultState, PlayStateType, PlayStateTypeModel } from '../models/playState'
-import { PreferencesClass } from '../utils/PreferencesClass'
 
 @Entry
 @Component
@@ -79,7 +78,7 @@ struct HomeIndex {
               }
             }
             .tabBar(this.getTabBar(item))
-            .backgroundColor('#121215')
+            .backgroundColor('#3c3f41')
           })
         }
         .barHeight(60)
@@ -103,6 +102,10 @@ struct HomeIndex {
     .height('100%')
     .backgroundColor('#3c3f41')
     .opacity(this.opacityNum)
+    .padding({
+      top: AppStorage.get("topHeight"),
+      bottom: AppStorage.get("bottomHeight")
+    })
   }
 }
 

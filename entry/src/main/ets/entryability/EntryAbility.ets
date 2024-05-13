@@ -1,4 +1,4 @@
-import { abilityAccessCtrl,AbilityConstant, UIAbility, Want } from '@kit.AbilityKit';
+import { abilityAccessCtrl, AbilityConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { window } from '@kit.ArkUI';
 import AVPlayerClass from '../utils/AVPlayerClass';
@@ -15,20 +15,17 @@ export default class EntryAbility extends UIAbility {
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onDestroy');
   }
 
-  onWindowStageCreate(windowStage: window.WindowStage): void {
-    let atManager: abilityAccessCtrl.AtManager = abilityAccessCtrl.createAtManager();
-    atManager.requestPermissionsFromUser(this.context, [
-      "ohos.permission.MICROPHONE"
-    ]).then(()=> {
-      AVPlayerClass.init(this.context)
-      AVSessionClass.init(this.context)
-      AudioCapturer.init()
-      AudioRender.init()
-      windowStage.getMainWindow().then(window => {
-        window.setWindowLayoutFullScreen(true)
-      })
-      windowStage.loadContent('pages/Start');
-    })
+  async onWindowStageCreate(windowStage: window.WindowStage): Promise<void> {
+    const win = await windowStage.getMainWindow()
+    win.setWindowLayoutFullScreen(true)
+    AppStorage.setOrCreate("topHeight", px2vp(win.getWindowAvoidArea(window.AvoidAreaType.TYPE_SYSTEM)
+      .topRect.height))
+    AppStorage.setOrCreate("bottomHeight", px2vp(win.getWindowAvoidArea(window.AvoidAreaType.TYPE_NAVIGATION_INDICATOR)
+      .bottomRect.height))
+    const childWin = await windowStage.createSubWindow("ad_win") // 创建广告子窗口
+    await childWin.showWindow()
+    await childWin.setUIContent("pages/Start")
+    windowStage.loadContent("pages/Index")
   }
 
   onWindowStageDestroy(): void {
@@ -42,9 +39,6 @@ export default class EntryAbility extends UIAbility {
   }
 
   onBackground(): void {
-    // Ability has back to background
-    AudioCapturer.stop()
-    AudioRender.stop()
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onBackground');
   }
 }

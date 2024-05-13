@@ -168,7 +168,6 @@ struct Recommend {
             right: 8
           })
         }
-        //   等等...(自由发挥)
       }.width('100%')
     }.height('100%')
   }
