@@ -230,11 +230,7 @@ struct Play {
               Image($r("app.media.ic_sing"))
                 .fillColor(Color.White)
                 .width(24)
-                .onClick(()=>{
-                  router.pushUrl({
-                    url:'pages/Sing'
-                  })
-                })
+
 
               Image($r("app.media.ic_download_o"))
                 .fillColor(Color.White)

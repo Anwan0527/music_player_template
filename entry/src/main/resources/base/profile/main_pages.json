@@ -7,7 +7,6 @@
     "pages/Moment/Moment",
     "pages/SongList/SongList",
     "pages/Mine/Mine",
-    "pages/Play/Play",
-    "pages/Sing/Sing"
+    "pages/Play/Play"
   ]
 }

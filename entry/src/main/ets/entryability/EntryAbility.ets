@@ -3,8 +3,6 @@ import { hilog } from '@kit.PerformanceAnalysisKit';
 import { window } from '@kit.ArkUI';
 import AVPlayerClass from '../utils/AVPlayerClass';
 import AVSessionClass from '../utils/AVSessionClass';
-import AudioCapturer from '../utils/AudioCapturer';
-import AudioRender from '../utils/AudioRender';
 
 export default class EntryAbility extends UIAbility {
   onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
