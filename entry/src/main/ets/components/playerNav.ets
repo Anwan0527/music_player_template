@@ -1,9 +1,10 @@
-import { PlayStateType } from '../models/playState'
+import { PlayStateType } from '../models'
+import { SONG_KEY } from '../constants'
 
 @Component
 struct PlayerNav {
-  @Link
-  playState: PlayStateType
+  @StorageLink(SONG_KEY)
+  playState: PlayStateType = new PlayStateType()
 
   build() {
     Row() {
@@ -27,7 +28,7 @@ struct PlayerNav {
           .aspectRatio(1)
           .fillColor('#4cafc6')
 
-        Image($r('app.media.ic_paused'))
+        Image(this.playState.isPlay ? $r('app.media.ic_paused') : $r('app.media.ic_play'))
           .fillColor('#4cafc6')
           .width(20)
 

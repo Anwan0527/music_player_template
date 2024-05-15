@@ -1,5 +1,5 @@
 import { media } from '@kit.MediaKit'
-import { defaultState, PlayStateType } from '../models/playState'
+import {  PlayStateType } from '../models/playState'
 import { BusinessError, commonEventManager, emitter } from '@kit.BasicServicesKit'
 import { Context, wantAgent } from '@kit.AbilityKit'
 import { PreferencesClass } from './PreferencesClass'
@@ -250,7 +250,7 @@ export default class AVPlayerClass {
         // 问题:由于我已经重置状态机了,所以没有给页面推送我删除后的状态
         // this.updateState()
         // 因为删除完了,playList是空数组了,不能用this.playList[].url的写法了
-        const data: PlayStateType = defaultState
+        const data: PlayStateType = new PlayStateType()
         // 1.推送到了页面
         emitter.emit({
           eventId: EmitEventType.UPDATE_STATE

@@ -1,7 +1,7 @@
 import { abilityAccessCtrl, AbilityConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { window } from '@kit.ArkUI';
-import AVPlayerClass from '../utils/AVPlayerClass';
+import { AVPlayerClass } from '../utils/AVPlayerClass2';
 import AVSessionClass from '../utils/AVSessionClass';
 
 export default class EntryAbility extends UIAbility {

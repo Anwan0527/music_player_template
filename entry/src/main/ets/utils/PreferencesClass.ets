@@ -1,5 +1,5 @@
 import preferences from '@ohos.data.preferences'
-import { defaultState, PlayStateType } from '../models/playState'
+import { PlayStateType } from '../models/playState'
 
 export class PreferencesClass {
   StoreName = 'HEIMA_CLOUD_MUSIC'
@@ -23,7 +23,7 @@ export class PreferencesClass {
   // 获取播放状态
   getPlayState(){
     const store = this.getStore()
-    return JSON.parse(store.getSync(this.PlayStateKey,JSON.stringify(defaultState)) as string) as PlayStateType
+    return JSON.parse(store.getSync(this.PlayStateKey,JSON.stringify("{}")) as string) as PlayStateType
   }
   // 存储卡片ID
   async setFormId(id:string){

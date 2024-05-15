@@ -2,7 +2,7 @@ import emitter from '@ohos.events.emitter'
 import { AnimatorResult } from '@ohos.animator'
 import { EmitEventType } from '../../constants/EventContants'
 import { songItemType } from '../../models/music'
-import { defaultState, PlayStateType, PlayStateTypeModel } from '../../models/playState'
+import {  PlayStateType } from '../../models/playState'
 import AVPlayerClass from '../../utils/AVPlayerClass'
 import { PreferencesClass } from '../../utils/PreferencesClass'
 import animator from '@ohos.animator';
@@ -62,7 +62,7 @@ struct Play {
   // 订阅事件
   @State
   @Watch('changeAnimate')
-  playState: PlayStateType = new PlayStateTypeModel(defaultState as PlayStateType)
+  playState: PlayStateType = new PlayStateType()
 
   changeAnimate() {
     if (this.playState.isPlay) {
@@ -84,7 +84,7 @@ struct Play {
     // 从播放器订阅
     emitter.on({ eventId: EmitEventType.UPDATE_STATE }, (data) => {
       // 传递数据最好是以字符串的数据结构进行传递
-      this.playState = new PlayStateTypeModel(data.data as PlayStateType)
+      this.playState = new PlayStateType()
       // 这里代表播放器已经处理了我的指令了
       // this.btnEnable = true
       if ((data.data as PlayStateType).isPlay) {

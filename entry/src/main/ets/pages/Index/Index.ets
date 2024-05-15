@@ -9,7 +9,7 @@ import router from '@ohos.router'
 import PlayerNav from '../../components/playerNav'
 import emitter from '@ohos.events.emitter'
 import { EmitEventType } from '../../constants/EventContants'
-import { defaultState, PlayStateType, PlayStateTypeModel } from '../../models/playState'
+import {  PlayStateType } from '../../models/playState'
 
 @Entry
 @Component
@@ -19,7 +19,7 @@ struct HomeIndex {
   @State
   opacityNum: number = 1
   @State
-  playState: PlayStateType = new PlayStateTypeModel(defaultState as PlayStateType)
+  playState: PlayStateType = new PlayStateType()
 
   // tabBar组件
   @Builder
@@ -55,7 +55,7 @@ struct HomeIndex {
     // 从播放器订阅
     emitter.on({ eventId: EmitEventType.UPDATE_STATE }, (data) => {
       // 传递数据最好是以字符串的数据结构进行传递
-      this.playState = new PlayStateTypeModel(data.data as PlayStateType)
+      this.playState = new PlayStateType()
     })
   }
 
@@ -87,7 +87,7 @@ struct HomeIndex {
         })
 
         // 背景播放
-        PlayerNav({ playState: $playState })
+        PlayerNav()
           .translate({ y: -60 })
           .onClick(() => {
             router.pushUrl({
