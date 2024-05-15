@@ -3,11 +3,9 @@ import { AnimatorResult } from '@ohos.animator'
 import { EmitEventType } from '../../constants/EventContants'
 import { songItemType } from '../../models/music'
 import {  PlayStateType } from '../../models/playState'
-import AVPlayerClass from '../../utils/AVPlayerClass'
-import { PreferencesClass } from '../../utils/PreferencesClass'
+import AVPlayerManger from '../../utils/AVPlayerManger'
 import animator from '@ohos.animator';
-import router from '@ohos.router'
-
+import { SONG_KEY } from  '../../constants'
 @Entry
 @Component
 struct Play {
@@ -54,13 +52,10 @@ struct Play {
       .width(80)
       .height('100%')
       .type(ButtonType.Normal)
-      .onClick(() => {
-        AVPlayerClass.remove(index)
-      })
+
   }
 
-  // 订阅事件
-  @State
+  @StorageLink(SONG_KEY)
   @Watch('changeAnimate')
   playState: PlayStateType = new PlayStateType()
 
@@ -79,21 +74,9 @@ struct Play {
 
   async aboutToAppear() {
     // 从首选项加载数据
-    // const preferences: PreferencesClass = new PreferencesClass(getContext(this))
-    // this.playState = preferences.getPlayState()
-    // 从播放器订阅
-    emitter.on({ eventId: EmitEventType.UPDATE_STATE }, (data) => {
-      // 传递数据最好是以字符串的数据结构进行传递
-      this.playState = new PlayStateType()
-      // 这里代表播放器已经处理了我的指令了
-      // this.btnEnable = true
-      if ((data.data as PlayStateType).isPlay) {
-        this.animatorResult.play()
-      } else {
-        this.animatorResult.pause()
-      }
-    })
-
+    if(this.playState.isPlay) {
+      this.animatorResult.play()
+    }
     this.animatorResult.onframe = (val) => {
       this.rotateAngle = val
     }
@@ -257,9 +240,7 @@ struct Play {
                   .trackColor('#ccc5c5c5')
                   .trackThickness(2)
                   .onChange((val) => {
-                    // if (!this.btnEnable) return
-                    // this.btnEnable = false
-                    AVPlayerClass.player.seek(val)
+                    AVPlayerManger.player!.seek(val)
                   })
                 Text(this.number2time(this.playState.duration))
                   .fontSize(12)
@@ -275,27 +256,21 @@ struct Play {
                     .fillColor(Color.White)
                     .width(30)
                     .onClick(() => {
-                      // if (!this.btnEnable) return
-                      // this.btnEnable = false
-                      AVPlayerClass.playMode = 'repeat'
+                      this.playState.playMode = 'repeat'
                     })
                 } else if (this.playState.playMode === 'repeat') {
                   Image($r("app.media.ic_repeat"))
                     .fillColor(Color.White)
                     .width(30)
                     .onClick(() => {
-                      // if (!this.btnEnable) return
-                      // this.btnEnable = false
-                      AVPlayerClass.playMode = 'random'
+                      this.playState.playMode = 'random'
                     })
                 } else if (this.playState.playMode === 'random') {
                   Image($r("app.media.ic_random"))
                     .fillColor(Color.White)
                     .width(30)
                     .onClick(() => {
-                      // if (!this.btnEnable) return
-                      // this.btnEnable = false
-                      AVPlayerClass.playMode = 'random'
+                      this.playState.playMode = 'auto'
                     })
                 }
 
@@ -303,9 +278,7 @@ struct Play {
                   .fillColor(Color.White)
                   .width(30)
                   .onClick(() => {
-                    // if (!this.btnEnable) return
-                    // this.btnEnable = false
-                    AVPlayerClass.playPrevious()
+
                   })
 
                 // 播放按钮
@@ -314,18 +287,20 @@ struct Play {
                   .width(50)
                   .onClick(() => {
                     // 如果能点才执行逻辑
-                    // if (!this.btnEnable) return
-                    // this.btnEnable = false
-                    this.playState.isPlay ? AVPlayerClass.pause() : AVPlayerClass.singlePlay(this.playState.playList[this.playState.playIndex])
+                    if (!this.playState.isPlay) {
+                      AVPlayerManger.singlePlay(this.playState.playList[this.playState.playIndex])
+                      this.animatorResult.play()
+                    } else {
+                      AVPlayerManger.pause()
+                      this.animatorResult.pause()
+                    }
                   })
                 // 下一首
                 Image($r('app.media.ic_next'))
                   .fillColor(Color.White)
                   .width(30)
                   .onClick(() => {
-                    // if (!this.btnEnable) return
-                    // this.btnEnable = false
-                    AVPlayerClass.playNext()
+
                   })
                 // 播放列表
                 Image($r('app.media.ic_song_list'))
@@ -437,7 +412,7 @@ struct Play {
                 .alignItems(VerticalAlign.Center)
               }
               .onClick(() => {
-                AVPlayerClass.singlePlay(item)
+                AVPlayerManger.singlePlay(item)
               })
               .swipeAction({
                 end: this.deleteButton(index)
