@@ -1,8 +1,7 @@
 import { abilityAccessCtrl, AbilityConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { window } from '@kit.ArkUI';
-import { AVPlayerClass } from '../utils/AVPlayerClass2';
-import AVSessionClass from '../utils/AVSessionClass';
+import AVPlayerManger from '../utils/AVPlayerManger';
 
 export default class EntryAbility extends UIAbility {
   onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
@@ -23,6 +22,7 @@ export default class EntryAbility extends UIAbility {
     const childWin = await windowStage.createSubWindow("ad_win") // 创建广告子窗口
     await childWin.showWindow()
     await childWin.setUIContent("pages/Start/Start")
+    AVPlayerManger.init()
     windowStage.loadContent("pages/Index/Index")
   }
 

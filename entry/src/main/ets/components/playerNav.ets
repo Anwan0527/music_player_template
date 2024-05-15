@@ -1,5 +1,6 @@
 import { PlayStateType } from '../models'
 import { SONG_KEY } from '../constants'
+import AVPlayerManger from '../utils/AVPlayerManger'
 
 @Component
 struct PlayerNav {
@@ -31,6 +32,14 @@ struct PlayerNav {
         Image(this.playState.isPlay ? $r('app.media.ic_paused') : $r('app.media.ic_play'))
           .fillColor('#4cafc6')
           .width(20)
+          .onClick(() => {
+            if(!this.playState.isPlay) {
+              AVPlayerManger.singlePlay(this.playState.playList[this.playState.playIndex])
+            }else {
+              AVPlayerManger.pause()
+            }
+
+          })
 
         Image($r('app.media.ic_next'))
           .width(20)

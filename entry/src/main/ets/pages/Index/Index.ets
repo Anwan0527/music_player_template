@@ -1,4 +1,4 @@
-import { TabClass } from '../../models/index'
+import { TabClass } from '../../models'
 import { tabsData } from '../../constants/index'
 import Find from '../Find/Find'
 import Mine from '../Mine/Mine'
@@ -7,9 +7,8 @@ import Recommend from '../Recommend/Recommend'
 import SongList from '../SongList/SongList'
 import router from '@ohos.router'
 import PlayerNav from '../../components/playerNav'
-import emitter from '@ohos.events.emitter'
-import { EmitEventType } from '../../constants/EventContants'
 import {  PlayStateType } from '../../models/playState'
+import { SONG_KEY } from '../../constants'
 
 @Entry
 @Component
@@ -18,7 +17,7 @@ struct HomeIndex {
   currentName: string = 'recommend'
   @State
   opacityNum: number = 1
-  @State
+  @StorageLink(SONG_KEY)
   playState: PlayStateType = new PlayStateType()
 
   // tabBar组件
@@ -47,18 +46,6 @@ struct HomeIndex {
     .alignItems(HorizontalAlign.Center)
     .justifyContent(FlexAlign.SpaceBetween)
   }
-
-  async aboutToAppear() {
-    // 从首选项加载数据
-    // const preferences: PreferencesClass = new PreferencesClass(getContext(this))
-    // this.playState = preferences.getPlayState()
-    // 从播放器订阅
-    emitter.on({ eventId: EmitEventType.UPDATE_STATE }, (data) => {
-      // 传递数据最好是以字符串的数据结构进行传递
-      this.playState = new PlayStateType()
-    })
-  }
-
   build() {
     Column() {
       Stack({ alignContent: Alignment.Bottom }) {
@@ -91,7 +78,7 @@ struct HomeIndex {
           .translate({ y: -60 })
           .onClick(() => {
             router.pushUrl({
-              url: 'pages/Play'
+              url: 'pages/Play/Play'
             })
           })
           .visibility(this.playState.playList.length > 0 && this.currentName !== 'mine' ? Visibility.Visible : Visibility.Hidden)
