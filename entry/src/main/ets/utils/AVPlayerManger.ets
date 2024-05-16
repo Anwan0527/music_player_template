@@ -2,6 +2,9 @@ import media from '@ohos.multimedia.media'
 import { PlayStateType, songItemType } from '../models'
 import { SONG_KEY } from '../constants'
 import { router } from '@kit.ArkUI'
+import { wantAgent } from '@kit.AbilityKit'
+import backgroundTaskManager from '@ohos.resourceschedule.backgroundTaskManager'
+import AvSessionManager from './AvSessionManager'
 
 class AVPlayerManger {
   // 创建的播放器应该存在我们的工具类上，这样才能被导出使用
@@ -44,6 +47,7 @@ class AVPlayerManger {
 
   // 单首歌播放
   static singlePlay(song: songItemType) {
+    AVPlayerManger.startBackgroundTask()
     // 添加到播放列表中，再进行播放
     const isList = AVPlayerManger.currentSong.playList.some((item: songItemType) => item.id === song.id)
     if (isList) {
@@ -98,7 +102,7 @@ class AVPlayerManger {
     if (!AVPlayerManger.currentSong.playList.length) {
       return
     }
-    if(!repeat) {
+    if (!repeat) {
       if (AVPlayerManger.currentSong.playMode === "random" && AVPlayerManger.currentSong.playList.length) {
         let index = 0
         do {
@@ -158,6 +162,34 @@ class AVPlayerManger {
       AVPlayerManger.currentSong.playList.splice(index, 1)
     }
     AppStorage.setOrCreate<PlayStateType>(SONG_KEY, AVPlayerManger.currentSong) // 更新全局状态
+  }
+
+  // 开启后台任务
+  static async startBackgroundTask() {
+    if(AvSessionManager.session.sessionId) {
+      // 如果有会话id 则不用开启后台任务
+      return
+    }
+    try {
+      let wantAgentInfo: wantAgent.WantAgentInfo = {
+        wants: [
+          {
+            bundleName: "com.example.heimacloudmusic",
+            abilityName: "EntryAbility"
+          }
+        ],
+        operationType: wantAgent.OperationType.START_ABILITY,
+        requestCode: 0,
+        wantAgentFlags: [wantAgent.WantAgentFlags.UPDATE_PRESENT_FLAG]
+      };
+      const want = await wantAgent.getWantAgent(wantAgentInfo) // 获取want信息
+      await backgroundTaskManager.startBackgroundRunning(getContext(),
+        backgroundTaskManager.BackgroundMode.AUDIO_PLAYBACK,
+        want)
+    } catch (error) {
+      // 错误消息
+      AlertDialog.show({ message: error.message })
+    }
 
   }
 }

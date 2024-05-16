@@ -2,6 +2,7 @@ import { abilityAccessCtrl, AbilityConstant, UIAbility, Want } from '@kit.Abilit
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { window } from '@kit.ArkUI';
 import AVPlayerManger from '../utils/AVPlayerManger';
+import AvSessionManager from '../utils/AvSessionManager';
 
 export default class EntryAbility extends UIAbility {
   onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
@@ -23,6 +24,7 @@ export default class EntryAbility extends UIAbility {
     await childWin.showWindow()
     await childWin.setUIContent("pages/Start/Start")
     AVPlayerManger.init()
+    AvSessionManager.init(this.context) //初始化媒体会话
     windowStage.loadContent("pages/Index/Index")
   }
 
