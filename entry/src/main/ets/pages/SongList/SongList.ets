@@ -2,6 +2,8 @@ import { favoriteList } from '../../constants/index'
 import { songItemType } from '../../models/index'
 import { router } from '@kit.ArkUI'
 import AVPlayerClass from '../../utils/AVPlayerClass'
+import AVPlayerManger from '../../utils/AVPlayerManger'
+
 @Entry
 @Component
 struct SongList {
@@ -184,7 +186,7 @@ struct SongList {
                 })
                 .onClick(() => {
                   // 播放
-                  AVPlayerClass.singlePlay(item)
+                  AVPlayerManger.singlePlay(item)
                 })
               })
 
