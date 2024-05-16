@@ -1,10 +1,13 @@
 import media from '@ohos.multimedia.media'
 import { PlayStateType, songItemType } from '../models'
 import { SONG_KEY } from '../constants'
+import { router } from '@kit.ArkUI'
+
 class AVPlayerManger {
   // 创建的播放器应该存在我们的工具类上，这样才能被导出使用
   static player: media.AVPlayer | null = null
   static currentSong: PlayStateType = new PlayStateType() // 当前歌曲的状态
+
   // 创建播放器的方法
   static async init() {
     if (!AVPlayerManger.player) {
@@ -22,6 +25,9 @@ class AVPlayerManger {
           AVPlayerManger.player!.play()
           AVPlayerManger.currentSong.isPlay = true // 播放状态
           break
+        case "completed":
+          AVPlayerManger.nextPlay()
+          break
       }
     })
     //  监听歌曲时长
@@ -35,6 +41,7 @@ class AVPlayerManger {
       AppStorage.setOrCreate<PlayStateType>(SONG_KEY, AVPlayerManger.currentSong) // 更新全局状态
     })
   }
+
   // 单首歌播放
   static singlePlay(song: songItemType) {
     // 添加到播放列表中，再进行播放
@@ -43,7 +50,8 @@ class AVPlayerManger {
       // 是不是正在播放的
       if (AVPlayerManger.player!.url === song.url) {
         // 重新播放（切换当前播放索引的歌曲）
-        AVPlayerManger.changePlay()
+          AVPlayerManger.player?.play()
+          AVPlayerManger.currentSong.isPlay = true
       } else {
         // 切换歌曲(更新播放索引切换歌曲)
         AVPlayerManger.currentSong.playIndex =
@@ -55,14 +63,60 @@ class AVPlayerManger {
       AVPlayerManger.currentSong.playIndex = 0
       AVPlayerManger.changePlay()
     }
+    AppStorage.setOrCreate<PlayStateType>(SONG_KEY, AVPlayerManger.currentSong) // 更新全局状态
 
   }
+
   // 暂停播放
-  static pause(){
+  static pause() {
     AVPlayerManger.player!.pause()
     // 更新播放器状态
     AVPlayerManger.currentSong.isPlay = false
   }
+
+  // 上一首
+  static prevPlay() {
+    // 如果是随机播放
+    if (AVPlayerManger.currentSong.playMode === "random" && AVPlayerManger.currentSong.playList.length) {
+      let index = -1
+      do {
+        index = Math.floor(Math.random() * AVPlayerManger.currentSong.playList.length)
+      } while (index === AVPlayerManger.currentSong.playIndex)
+      AVPlayerManger.currentSong.playIndex = index
+    } else {
+      AVPlayerManger.currentSong.playIndex--
+      // 有可能减到负数
+      AVPlayerManger.currentSong.playIndex =
+        (AVPlayerManger.currentSong.playIndex + AVPlayerManger.currentSong.playList.length) %
+        AVPlayerManger.currentSong.playList.length
+    }
+    AVPlayerManger.singlePlay(AVPlayerManger.currentSong.playList[AVPlayerManger.currentSong.playIndex])
+  }
+
+  // 下一首
+  static nextPlay() {
+    if (!AVPlayerManger.currentSong.playList.length) {
+      return
+    }
+    if (AVPlayerManger.currentSong.playMode === "random" && AVPlayerManger.currentSong.playList.length) {
+      let index = 0
+      do {
+        index = Math.floor(Math.random() * AVPlayerManger.currentSong.playList.length)
+      } while (index === AVPlayerManger.currentSong.playIndex)
+      AVPlayerManger.currentSong.playIndex = index
+
+    }
+    else {
+      AVPlayerManger.currentSong.playIndex++
+      // 有可能减到负数
+      AVPlayerManger.currentSong.playIndex =
+        (AVPlayerManger.currentSong.playIndex + AVPlayerManger.currentSong.playList.length) %
+        AVPlayerManger.currentSong.playList.length
+    }
+    AVPlayerManger.singlePlay(AVPlayerManger.currentSong.playList[AVPlayerManger.currentSong.playIndex])
+  }
+
+  // 下一首
   // 切换歌曲
   static async changePlay() {
     // 重置播放器状态至初始化,异步方法
@@ -76,5 +130,31 @@ class AVPlayerManger {
     AVPlayerManger.currentSong.author = AVPlayerManger.currentSong.playList[AVPlayerManger.currentSong.playIndex].author
     AVPlayerManger.currentSong.url = AVPlayerManger.currentSong.playList[AVPlayerManger.currentSong.playIndex].url
   }
+  // 删除播放
+  static async remove (index: number) {
+    if (AVPlayerManger.currentSong.playIndex === index) {
+      // 是否删除正在播放的歌曲
+      if(AVPlayerManger.currentSong.playList.length > 1) {
+        // 如果当前的歌曲列表超过两个
+        AVPlayerManger.currentSong.playList.splice(index, 1)
+        AVPlayerManger.currentSong.playIndex = (AVPlayerManger.currentSong.playIndex + AVPlayerManger.currentSong.playList.length) % AVPlayerManger.currentSong.playList.length
+        AVPlayerManger.singlePlay(AVPlayerManger.currentSong.playList[AVPlayerManger.currentSong.playIndex])
+      }else {
+        await AVPlayerManger.player!.reset()
+        AVPlayerManger.currentSong = new PlayStateType() // 重置数据
+        router.back()
+      }
+
+    }else {
+      // 如果不是
+      if (AVPlayerManger.currentSong.playIndex > index) {
+        AVPlayerManger.currentSong.playIndex--
+      }
+      AVPlayerManger.currentSong.playList.splice(index, 1)
+    }
+    AppStorage.setOrCreate<PlayStateType>(SONG_KEY, AVPlayerManger.currentSong) // 更新全局状态
+
+  }
 }
+
 export default AVPlayerManger

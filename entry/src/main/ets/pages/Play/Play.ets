@@ -52,6 +52,9 @@ struct Play {
       .width(80)
       .height('100%')
       .type(ButtonType.Normal)
+      .onClick(() => {
+        AVPlayerManger.remove(index) // 删除歌曲
+      })
 
   }
 
@@ -273,12 +276,12 @@ struct Play {
                       this.playState.playMode = 'auto'
                     })
                 }
-
+                // 前一首
                 Image($r('app.media.ic_prev'))
                   .fillColor(Color.White)
                   .width(30)
                   .onClick(() => {
-
+                    AVPlayerManger.prevPlay()
                   })
 
                 // 播放按钮
@@ -300,7 +303,7 @@ struct Play {
                   .fillColor(Color.White)
                   .width(30)
                   .onClick(() => {
-
+                    AVPlayerManger.nextPlay()
                   })
                 // 播放列表
                 Image($r('app.media.ic_song_list'))

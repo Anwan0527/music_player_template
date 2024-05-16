@@ -28,6 +28,9 @@ struct PlayerNav {
           .width(20)
           .aspectRatio(1)
           .fillColor('#4cafc6')
+          .onClick(() => {
+            AVPlayerManger.prevPlay()
+          })
 
         Image(this.playState.isPlay ? $r('app.media.ic_paused') : $r('app.media.ic_play'))
           .fillColor('#4cafc6')
@@ -38,13 +41,15 @@ struct PlayerNav {
             }else {
               AVPlayerManger.pause()
             }
-
           })
 
         Image($r('app.media.ic_next'))
           .width(20)
           .aspectRatio(1)
           .fillColor('#4cafc6')
+          .onClick(() => {
+            AVPlayerManger.nextPlay()
+          })
 
       }.height('100%')
     }
