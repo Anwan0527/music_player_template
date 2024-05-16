@@ -37,10 +37,12 @@ class AVPlayerManger {
     AVPlayerManger.player.on('durationUpdate', (duration) => {
       // 每次切换歌曲都会触发这个函数，更新即可
       AVPlayerManger.currentSong.duration = duration
+      AvSessionManager.setAvMetaData(AVPlayerManger.currentSong.playList[AVPlayerManger.currentSong.playIndex])
     })
     //  监听播放时长
     AVPlayerManger.player.on('timeUpdate', (time) => {
       AVPlayerManger.currentSong.time = time
+      AvSessionManager.setAVPlaybackState() // 更新状态
       AppStorage.setOrCreate<PlayStateType>(SONG_KEY, AVPlayerManger.currentSong) // 更新全局状态
     })
   }
@@ -68,6 +70,7 @@ class AVPlayerManger {
       AVPlayerManger.changePlay()
     }
     AppStorage.setOrCreate<PlayStateType>(SONG_KEY, AVPlayerManger.currentSong) // 更新全局状态
+    AvSessionManager.setAVPlaybackState() // 更新状态
 
   }
 
@@ -76,6 +79,7 @@ class AVPlayerManger {
     AVPlayerManger.player!.pause()
     // 更新播放器状态
     AVPlayerManger.currentSong.isPlay = false
+    AvSessionManager.setAVPlaybackState() // 更新状态
   }
 
   // 上一首
