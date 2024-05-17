@@ -1,5 +1,5 @@
 import { songs } from '../../constants/index'
-import {songItemType} from '../../models/index'
+import { songItemType } from '../../models/index'
 import AVPlayerManger from '../../utils/AVPlayerManger'
 @Entry
 @Component

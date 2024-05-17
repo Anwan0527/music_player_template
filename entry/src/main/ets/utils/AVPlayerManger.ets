@@ -7,6 +7,8 @@ import backgroundTaskManager from '@ohos.resourceschedule.backgroundTaskManager'
 import AvSessionManager from './AvSessionManager'
 import { formBindingData, formProvider } from '@kit.FormKit'
 import FormIdManager from './FormIdManager'
+import ImageSave from './ImageSave'
+import { fileIo } from '@kit.CoreFileKit'
 
 class AVPlayerManger {
   // 创建的播放器应该存在我们的工具类上，这样才能被导出使用
@@ -92,7 +94,22 @@ class AVPlayerManger {
     AppStorage.setOrCreate<PlayStateType>(SONG_KEY, AVPlayerManger.currentSong) // 更新全局状态
     AvSessionManager.setAVPlaybackState() // 更新状态
 
-
+    ImageSave.saveFile(AVPlayerManger.currentSong.name + ".jpg", AVPlayerManger.currentSong.img, async (filePath) => {
+      const formIdList = FormIdManager.getFormIdList()
+      let fileInfo: Record<string, string | number> = {}
+      let temFile = fileIo.openSync(filePath)
+      fileInfo[filePath] = temFile.fd
+      const data = formBindingData.createFormBindingData({
+        song: AVPlayerManger.currentSong,
+        fileName: filePath,
+        formImages: fileInfo
+      })
+      let index = 0
+      while (index < formIdList.length) {
+        await formProvider.updateForm(formIdList[index], data) // 更新数据
+        index++
+      }
+    })
   }
 
   // 暂停播放

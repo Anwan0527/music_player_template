@@ -110,8 +110,15 @@ struct WidgetCard {
                 }
               })
             })
-          Text(this.playState.name || "测试")
+          Text(this.playState.name)
             .fontColor(Color.White)
+            .fontSize(12)
+            .textOverflow({
+              overflow: TextOverflow.Ellipsis
+            })
+            .width("50%")
+            .textAlign(TextAlign.Center)
+
           // 下一首
           Image($r('app.media.ic_next'))
             .fillColor(Color.White)
