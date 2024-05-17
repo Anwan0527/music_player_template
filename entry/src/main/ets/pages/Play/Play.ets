@@ -68,10 +68,12 @@ struct Play {
       this.randomColor = `rgb(${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)})`
       this.randomShakenX = 2 - Math.random() * 4
       this.randomShakenY = 2 - Math.random() * 4
+      this.animatorResult.play()
     } else {
       this.randomColor = 'rbg(0,0,0)'
       this.randomShakenX = 0
       this.randomShakenY = 0
+      this.animatorResult.pause()
     }
   }
 

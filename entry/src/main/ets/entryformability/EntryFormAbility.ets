@@ -3,21 +3,23 @@ import { Want } from '@kit.AbilityKit';
 import { PreferencesClass } from '../utils/PreferencesClass';
 import { SubscriberClass } from '../utils/SubscriberClasss';
 import { PublishEventType } from '../constants/EventContants';
+import FormIdManager from '../utils/FormIdManager';
+import AVPlayerManger from '../utils/AVPlayerManger';
+import { SONG_KEY } from '../constants';
 
 export default class EntryFormAbility extends FormExtensionAbility {
   onAddForm(want: Want) {
     // Called to return a FormBindingData object.
-    let formData = '';
     let formId: string = want.parameters?.[formInfo.FormParam.IDENTITY_KEY] as string
-    SubscriberClass.publish(PublishEventType.CARD_PUBLISH,formId)
-    const preferences = new PreferencesClass(this.context)
-    preferences.setFormId(formId)
-    return formBindingData.createFormBindingData(formData);
+    return formBindingData.createFormBindingData({
+      formId
+    });
   }
 
   onCastToNormalForm(formId: string) {
     // Called when the form provider is notified that a temporary form is successfully
     // converted to a normal form.
+
   }
 
   onUpdateForm(formId: string) {
@@ -29,14 +31,11 @@ export default class EntryFormAbility extends FormExtensionAbility {
   }
 
   onFormEvent(formId: string, message: string) {
+    console.log("current_params", message)
     // Called when a specified message event defined by the form provider is triggered.
-    SubscriberClass.publish(PublishEventType.CARD_PUBLISH,JSON.parse(message).type)
   }
 
   onRemoveForm(formId: string) {
-    SubscriberClass.publish(PublishEventType.CARD_PUBLISH,'')
-    const preferences = new PreferencesClass(this.context)
-    preferences.setFormId('')
     // Called to notify the form provider that a specified form has been destroyed.
   }
 

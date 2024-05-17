@@ -4,6 +4,8 @@ import { recommendListType, recommendDailyType } from '../../models/index'
 @Entry
 @Component
 struct Recommend {
+  @State
+  value: number  = 10
   @Builder
   SearchInput() {
     Row() {
@@ -68,6 +70,7 @@ struct Recommend {
   build() {
     Scroll() {
       Column() {
+
         //   搜索框
         this.SearchInput()
         //   轮播图

@@ -5,6 +5,8 @@ import { router } from '@kit.ArkUI'
 import { wantAgent } from '@kit.AbilityKit'
 import backgroundTaskManager from '@ohos.resourceschedule.backgroundTaskManager'
 import AvSessionManager from './AvSessionManager'
+import { formBindingData, formProvider } from '@kit.FormKit'
+import FormIdManager from './FormIdManager'
 
 class AVPlayerManger {
   // 创建的播放器应该存在我们的工具类上，这样才能被导出使用
@@ -39,16 +41,34 @@ class AVPlayerManger {
       AVPlayerManger.currentSong.duration = duration
       AvSessionManager.setAvMetaData(AVPlayerManger.currentSong.playList[AVPlayerManger.currentSong.playIndex])
     })
+    let timer: number | null = null
     //  监听播放时长
-    AVPlayerManger.player.on('timeUpdate', (time) => {
+    AVPlayerManger.player.on('timeUpdate', async (time) => {
       AVPlayerManger.currentSong.time = time
       AvSessionManager.setAVPlaybackState() // 更新状态
       AppStorage.setOrCreate<PlayStateType>(SONG_KEY, AVPlayerManger.currentSong) // 更新全局状态
+      // 防抖
+
+      if (!timer) {
+        timer = setTimeout(async () => {
+          const formIdList = FormIdManager.getFormIdList()
+          const data = formBindingData.createFormBindingData({
+            song: AVPlayerManger.currentSong
+          })
+          let index = 0
+          while (index < formIdList.length) {
+            await formProvider.updateForm(formIdList[index], data) // 更新数据
+            index++
+          }
+          timer = null
+        }, 1000)
+      }
+
     })
   }
 
   // 单首歌播放
-  static singlePlay(song: songItemType) {
+  static async singlePlay(song: songItemType) {
     AVPlayerManger.startBackgroundTask()
     // 添加到播放列表中，再进行播放
     const isList = AVPlayerManger.currentSong.playList.some((item: songItemType) => item.id === song.id)
@@ -71,6 +91,7 @@ class AVPlayerManger {
     }
     AppStorage.setOrCreate<PlayStateType>(SONG_KEY, AVPlayerManger.currentSong) // 更新全局状态
     AvSessionManager.setAVPlaybackState() // 更新状态
+
 
   }
 
@@ -170,7 +191,7 @@ class AVPlayerManger {
 
   // 开启后台任务
   static async startBackgroundTask() {
-    if(AvSessionManager.session.sessionId) {
+    if (AvSessionManager.session.sessionId) {
       // 如果有会话id 则不用开启后台任务
       return
     }
