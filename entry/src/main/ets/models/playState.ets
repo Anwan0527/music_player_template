@@ -12,5 +12,6 @@ export class PlayStateType {
   isPlay: boolean = false // 是否正在播放
   playMode: 'auto' | 'repeat' | 'random' = "auto" // 播放模式
   playList: songItemType[] = [] // 当前的播放列表
+  cacheImg?: string // 缓存图片地址
 }
 

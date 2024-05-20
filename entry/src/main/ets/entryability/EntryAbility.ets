@@ -39,10 +39,12 @@ export default class EntryAbility extends UIAbility {
     // 监听formId
     this.callee.on("getFormId", (data) => {
       const res = JSON.parse(data.readString()) as ParamsForm
-      formProvider.updateForm(res.formId, formBindingData.createFormBindingData({
-        song: AppStorage.get(SONG_KEY)
-      }))
-      FormIdManager.addFormId(res.formId)
+      // formProvider.updateForm(res.formId, formBindingData.createFormBindingData({
+      //   song: AppStorage.get(SONG_KEY)
+      // }))
+      FormIdManager.addFormId(res.formId).then(() => {
+          AVPlayerManger.pushImg()
+      })
       return new Params();
     })
   }

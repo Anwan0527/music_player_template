@@ -94,22 +94,7 @@ class AVPlayerManger {
     AppStorage.setOrCreate<PlayStateType>(SONG_KEY, AVPlayerManger.currentSong) // 更新全局状态
     AvSessionManager.setAVPlaybackState() // 更新状态
 
-    ImageSave.saveFile(AVPlayerManger.currentSong.name + ".jpg", AVPlayerManger.currentSong.img, async (filePath) => {
-      const formIdList = FormIdManager.getFormIdList()
-      let fileInfo: Record<string, string | number> = {}
-      let temFile = fileIo.openSync(filePath)
-      fileInfo[filePath] = temFile.fd
-      const data = formBindingData.createFormBindingData({
-        song: AVPlayerManger.currentSong,
-        fileName: filePath,
-        formImages: fileInfo
-      })
-      let index = 0
-      while (index < formIdList.length) {
-        await formProvider.updateForm(formIdList[index], data) // 更新数据
-        index++
-      }
-    })
+
   }
 
   // 暂停播放
@@ -177,6 +162,27 @@ class AVPlayerManger {
     AVPlayerManger.currentSong.name = AVPlayerManger.currentSong.playList[AVPlayerManger.currentSong.playIndex].name
     AVPlayerManger.currentSong.author = AVPlayerManger.currentSong.playList[AVPlayerManger.currentSong.playIndex].author
     AVPlayerManger.currentSong.url = AVPlayerManger.currentSong.playList[AVPlayerManger.currentSong.playIndex].url
+    AVPlayerManger.pushImg() // 推送封面
+  }
+
+  static async pushImg() {
+    ImageSave.saveFile(AVPlayerManger.currentSong.name + ".jpg", AVPlayerManger.currentSong.img, async (filePath) => {
+      AVPlayerManger.currentSong.cacheImg = filePath
+      const formIdList = FormIdManager.getFormIdList()
+      let fileInfo: Record<string, string | number> = {}
+      let temFile = fileIo.openSync(AVPlayerManger.currentSong.cacheImg)
+      fileInfo[AVPlayerManger.currentSong.cacheImg!] = temFile.fd
+      const data = formBindingData.createFormBindingData({
+        song: AVPlayerManger.currentSong,
+        fileName: AVPlayerManger.currentSong.cacheImg,
+        formImages: fileInfo
+      })
+      let index = 0
+      while (index < formIdList.length) {
+        await formProvider.updateForm(formIdList[index], data) // 更新数据
+        index++
+      }
+    })
   }
 
   // 删除播放
