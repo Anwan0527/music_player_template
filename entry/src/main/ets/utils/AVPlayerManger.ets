@@ -9,6 +9,7 @@ import { formBindingData, formProvider } from '@kit.FormKit'
 import FormIdManager from './FormIdManager'
 import ImageSave from './ImageSave'
 import { fileIo } from '@kit.CoreFileKit'
+import SongManager from './SongManger'
 
 class AVPlayerManger {
   // 创建的播放器应该存在我们的工具类上，这样才能被导出使用
@@ -163,6 +164,7 @@ class AVPlayerManger {
     AVPlayerManger.currentSong.author = AVPlayerManger.currentSong.playList[AVPlayerManger.currentSong.playIndex].author
     AVPlayerManger.currentSong.url = AVPlayerManger.currentSong.playList[AVPlayerManger.currentSong.playIndex].url
     AVPlayerManger.pushImg() // 推送封面
+    SongManager.updateSong(JSON.stringify(AVPlayerManger.currentSong))
   }
 
   static async pushImg() {
