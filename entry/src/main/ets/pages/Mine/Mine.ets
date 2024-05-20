@@ -1,7 +1,6 @@
 import { songs } from '../../constants/MusicConstants'
 import { songItemType, songItemTypeModel } from '../../models/music'
 import { PlayStateType } from '../../models/playState'
-import AVPlayerManger from '../../utils/AVPlayerManger'
 
 @Entry
 @Component
@@ -139,12 +138,8 @@ struct SongCard {
           .borderRadius(8)
           .clip(true)
           .onClick(() => {
-            //点击的卡片的歌曲和当前播放的歌曲是不是同一首歌曲
-            if (this.playState.url === item.url) {
-              this.playState.isPlay ? AVPlayerManger.pause() : AVPlayerManger.singlePlay(item)
-            } else {
-              AVPlayerManger.singlePlay(item)
-            }
+            // 播放
+
           })
         }
       })

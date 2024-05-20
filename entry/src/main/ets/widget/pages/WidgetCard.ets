@@ -1,23 +1,3 @@
-interface songItemType {
-  img: string
-  name: string
-  author: string
-  url: string
-  id: string
-}
-
-export class PlayStateType {
-  img: string = "" // 音乐封面
-  name: string = "" // 音乐名称
-  author: string = "" // 作者
-  url: string = "" // 当前播放连接
-  playIndex: number = 0 // 当前在播放列表中的播放索引
-  time: number = 0 // 播放时间
-  duration: number = 0 // 音乐的播放市场
-  isPlay: boolean = false // 是否正在播放
-  playMode: 'auto' | 'repeat' | 'random' = "auto" // 播放模式
-  playList: songItemType[] = [] // 当前的播放列表
-}
 
 const localStorage = new LocalStorage()
 @Entry(localStorage)
@@ -25,25 +5,6 @@ const localStorage = new LocalStorage()
 struct WidgetCard {
   @State
   randomColor: string = 'rgb(0,0,0)'
-  @LocalStorageProp('song')
-  @Watch('updateState')
-  playState: PlayStateType = new PlayStateType()
-
-  @LocalStorageProp('formId')
-  @Watch("updateFormId")
-  formId: string = ""
-
-  updateFormId () {
-    console.log("formId_card", this.formId)
-    postCardAction(this, {
-      action: 'call',
-      abilityName: 'EntryAbility',
-      params: {
-        method: 'getFormId',
-        formId: this.formId
-      }
-    })
-  }
   updateState() {
     this.randomColor =
       `rgb(${Math.floor(Math.random() * 255)},${Math.floor(Math.random() * 255)},${Math.floor(Math.random() * 255)})`
@@ -100,17 +61,9 @@ struct WidgetCard {
             .fillColor(Color.White)
             .width(30)
             .onClick(() => {
-              //无法导入AVPlayerClass
-              // 通知应用切换下一首
-              postCardAction(this, {
-                action: 'call',
-                abilityName: 'EntryAbility',
-                params: {
-                  method: 'prev'
-                }
-              })
+              // 上一首
             })
-          Text(this.playState.name)
+          Text("奢香夫人")
             .fontColor(Color.White)
             .fontSize(12)
             .textOverflow({
@@ -124,16 +77,7 @@ struct WidgetCard {
             .fillColor(Color.White)
             .width(30)
             .onClick(() => {
-              //无法导入AVPlayerClass
-              // 通知应用切换下一首
-              // 没有办法在页面使用发布类，但是Ability可以发布
-              postCardAction(this, {
-                action: 'call',
-                abilityName: 'EntryAbility',
-                params: {
-                  method: 'next'
-                }
-              })
+              // 下一首
             })
         }
         .width('100%')

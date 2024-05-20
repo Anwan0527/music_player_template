@@ -1,9 +1,6 @@
-import emitter from '@ohos.events.emitter'
 import { AnimatorResult } from '@ohos.animator'
-import { EmitEventType } from '../../constants/EventContants'
 import { songItemType } from '../../models/music'
 import {  PlayStateType } from '../../models/playState'
-import AVPlayerManger from '../../utils/AVPlayerManger'
 import animator from '@ohos.animator';
 import { SONG_KEY } from  '../../constants'
 @Entry
@@ -53,7 +50,7 @@ struct Play {
       .height('100%')
       .type(ButtonType.Normal)
       .onClick(() => {
-        AVPlayerManger.remove(index) // 删除歌曲
+         // 删除歌曲
       })
 
   }
@@ -245,7 +242,7 @@ struct Play {
                   .trackColor('#ccc5c5c5')
                   .trackThickness(2)
                   .onChange((val) => {
-                    AVPlayerManger.player!.seek(val)
+                    // 拖拽进度
                   })
                 Text(this.number2time(this.playState.duration))
                   .fontSize(12)
@@ -283,7 +280,7 @@ struct Play {
                   .fillColor(Color.White)
                   .width(30)
                   .onClick(() => {
-                    AVPlayerManger.prevPlay()
+                    // 上一首
                   })
 
                 // 播放按钮
@@ -292,20 +289,14 @@ struct Play {
                   .width(50)
                   .onClick(() => {
                     // 如果能点才执行逻辑
-                    if (!this.playState.isPlay) {
-                      AVPlayerManger.singlePlay(this.playState.playList[this.playState.playIndex])
-                      this.animatorResult.play()
-                    } else {
-                      AVPlayerManger.pause()
-                      this.animatorResult.pause()
-                    }
+                    // 播放及动画
                   })
                 // 下一首
                 Image($r('app.media.ic_next'))
                   .fillColor(Color.White)
                   .width(30)
                   .onClick(() => {
-                    AVPlayerManger.nextPlay()
+                    // 下一首
                   })
                 // 播放列表
                 Image($r('app.media.ic_song_list'))
@@ -417,7 +408,7 @@ struct Play {
                 .alignItems(VerticalAlign.Center)
               }
               .onClick(() => {
-                AVPlayerManger.singlePlay(item)
+                // 播放
               })
               .swipeAction({
                 end: this.deleteButton(index)

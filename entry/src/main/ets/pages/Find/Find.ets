@@ -1,6 +1,5 @@
 import { songs } from '../../constants/index'
 import { songItemType } from '../../models/index'
-import AVPlayerManger from '../../utils/AVPlayerManger'
 @Entry
 @Component
 struct Find {
@@ -51,7 +50,7 @@ struct Find {
               }
             }.onClick(() => {
               // 播放
-              AVPlayerManger.singlePlay(item)
+
             })
 
           })

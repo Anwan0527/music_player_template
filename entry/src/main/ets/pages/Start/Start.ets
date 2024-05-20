@@ -1,4 +1,3 @@
-import router from '@ohos.router'
 import { window } from '@kit.ArkUI'
 
 @Entry
