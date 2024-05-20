@@ -1,6 +1,6 @@
 import { momentList } from '../../constants/index'
 import { momentListType } from '../../models/index'
-import AVPlayerClass from '../../utils/AVPlayerClass'
+import AVPlayerManger from '../../utils/AVPlayerManger'
 
 @Entry
 @Component
@@ -60,7 +60,7 @@ struct Moment {
                   .borderRadius(8)
                   .clip(true)
                   .onClick(()=>{
-                      AVPlayerClass.singlePlay(item.song)
+                    AVPlayerManger.singlePlay(item.song)
                   })
 
                   Row({ space: 20 }) {

@@ -1,11 +1,6 @@
 import { formBindingData, FormExtensionAbility, formInfo } from '@kit.FormKit';
 import { Want } from '@kit.AbilityKit';
-import { PreferencesClass } from '../utils/PreferencesClass';
-import { SubscriberClass } from '../utils/SubscriberClasss';
-import { PublishEventType } from '../constants/EventContants';
-import FormIdManager from '../utils/FormIdManager';
-import AVPlayerManger from '../utils/AVPlayerManger';
-import { SONG_KEY } from '../constants';
+
 
 export default class EntryFormAbility extends FormExtensionAbility {
   onAddForm(want: Want) {
