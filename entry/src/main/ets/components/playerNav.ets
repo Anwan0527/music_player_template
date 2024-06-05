@@ -1,5 +1,6 @@
 import { PlayStateType } from '../models'
 import { SONG_KEY } from '../constants'
+import AvPlayerManager from '../utils/AvPlayerManger'
 
 @Component
 struct PlayerNav {
@@ -28,7 +29,8 @@ struct PlayerNav {
           .aspectRatio(1)
           .fillColor('#4cafc6')
           .onClick(() => {
-             // 上一首
+            // 上一首
+            AvPlayerManager.prevPlay()
           })
 
         Image(this.playState.isPlay ? $r('app.media.ic_paused') : $r('app.media.ic_play'))
@@ -36,6 +38,11 @@ struct PlayerNav {
           .width(20)
           .onClick(() => {
             // 暂停 播放
+            if (!this.playState.isPlay) { //暂停
+              AvPlayerManager.singlePlay(this.playState.playList[this.playState.playIndex])
+            } else {
+              AvPlayerManager.pause()
+            }
           })
 
         Image($r('app.media.ic_next'))
@@ -43,7 +50,8 @@ struct PlayerNav {
           .aspectRatio(1)
           .fillColor('#4cafc6')
           .onClick(() => {
-             // 下一首
+            // 下一首
+            AvPlayerManager.nextPlay()
           })
 
       }.height('100%')

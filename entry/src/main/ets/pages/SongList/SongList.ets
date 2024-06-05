@@ -1,5 +1,6 @@
 import { favoriteList } from '../../constants/index'
 import { songItemType } from '../../models/index'
+import AvPlayerManager from '../../utils/AvPlayerManger'
 
 @Entry
 @Component
@@ -36,6 +37,7 @@ struct SongList {
             .alignItems(HorizontalAlign.Start)
             .layoutWeight(1)
           }
+
           // 按钮
           Row() {
             Button() {
@@ -98,6 +100,7 @@ struct SongList {
           colors: [['#ff865d13', 0.0], [Color.Transparent, 1.0]]
         })
         .padding(16)
+
         // 播放列表
         Column() {
           Row({ space: 8 }) {
@@ -147,6 +150,7 @@ struct SongList {
                     .width(50)
                     .aspectRatio(1)
                     .justifyContent(FlexAlign.Center)
+
                     // 列表
                     Row({ space: 10 }) {
                       if (index < 3) {
@@ -183,7 +187,7 @@ struct SongList {
                 })
                 .onClick(() => {
                   // 播放
-
+                  AvPlayerManager.singlePlay(item)
                 })
               })
 

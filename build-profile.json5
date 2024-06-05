@@ -5,13 +5,13 @@
         "name": "default",
         "type": "HarmonyOS",
         "material": {
-          "certpath": "/Users/gaolingyu/.ohos/config/default_HeimaCloudMusic_LrW8-kHCvRd0Tc_rw81Mcu6oGwQ-iL4BfTbHv__Xxjo=.cer",
-          "storePassword": "0000001BC8F7E5B620BADEE6539D8CB935E20CF2D2B907D219D7A26BDD87C53C6A609E38D4A8D0F4C77581",
+          "certpath": "C:\\Users\\anwan\\.ohos\\config\\default_music_player_template_bY04zx7g6CSSVlsZhgBj9IxaMmwmxw6qHrFLd0wLqdI=.cer",
+          "storePassword": "0000001B57A7B0F1C84B64CC89ACEB883843F536E9DAC9C2EE70CE5CB47F22119FB00AC9669898FE42636B",
           "keyAlias": "debugKey",
-          "keyPassword": "0000001BA5ABA49E456CE7D75105E676BF73CAC566E913D6B4B6D3D27C309B1A063F496692703A30D380F0",
-          "profile": "/Users/gaolingyu/.ohos/config/default_HeimaCloudMusic_LrW8-kHCvRd0Tc_rw81Mcu6oGwQ-iL4BfTbHv__Xxjo=.p7b",
+          "keyPassword": "0000001BD51566166DA427CBAC8F2DE03B1935E96934B0A5609FA3359B80092C8B0E57C8B7E455CDFB6E63",
+          "profile": "C:\\Users\\anwan\\.ohos\\config\\default_music_player_template_bY04zx7g6CSSVlsZhgBj9IxaMmwmxw6qHrFLd0wLqdI=.p7b",
           "signAlg": "SHA256withECDSA",
-          "storeFile": "/Users/gaolingyu/.ohos/config/default_HeimaCloudMusic_LrW8-kHCvRd0Tc_rw81Mcu6oGwQ-iL4BfTbHv__Xxjo=.p12"
+          "storeFile": "C:\\Users\\anwan\\.ohos\\config\\default_music_player_template_bY04zx7g6CSSVlsZhgBj9IxaMmwmxw6qHrFLd0wLqdI=.p12"
         }
       }
     ],

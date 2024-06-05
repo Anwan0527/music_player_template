@@ -1,18 +1,24 @@
-import {  AbilityConstant, UIAbility, Want } from '@kit.AbilityKit';
+import { AbilityConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { window } from '@kit.ArkUI';
 import { SONG_KEY } from '../constants';
+import AvPlayerManager from '../utils/AvPlayerManger';
+import AvSessionManager from '../utils/AvSessionManager';
 
 
 export default class EntryAbility extends UIAbility {
   onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onCreate');
+    AvPlayerManager.init() //直接初始化播放器
+    AvSessionManager.init(this.context)
   }
+
   onDestroy(): void {
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onDestroy');
   }
 
   async onWindowStageCreate(windowStage: window.WindowStage): Promise<void> {
+    AvPlayerManager.init() //初始化播放器
     const win = await windowStage.getMainWindow()
     win.setWindowLayoutFullScreen(true)
     AppStorage.setOrCreate("topHeight", px2vp(win.getWindowAvoidArea(window.AvoidAreaType.TYPE_SYSTEM)

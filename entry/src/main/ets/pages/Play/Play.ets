@@ -1,8 +1,10 @@
 import { AnimatorResult } from '@ohos.animator'
 import { songItemType } from '../../models/music'
-import {  PlayStateType } from '../../models/playState'
+import { PlayStateType } from '../../models/playState'
 import animator from '@ohos.animator';
-import { SONG_KEY } from  '../../constants'
+import { SONG_KEY } from '../../constants'
+import AvPlayerManager from '../../utils/AvPlayerManger';
+
 @Entry
 @Component
 struct Play {
@@ -50,7 +52,8 @@ struct Play {
       .height('100%')
       .type(ButtonType.Normal)
       .onClick(() => {
-         // 删除歌曲
+        // 删除歌曲
+        AvPlayerManager.remove(index)
       })
 
   }
@@ -62,7 +65,8 @@ struct Play {
   changeAnimate() {
     if (this.playState.isPlay) {
       // 播放状态
-      this.randomColor = `rgb(${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)})`
+      this.randomColor =
+        `rgb(${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)})`
       this.randomShakenX = 2 - Math.random() * 4
       this.randomShakenY = 2 - Math.random() * 4
       this.animatorResult.play()
@@ -76,7 +80,7 @@ struct Play {
 
   async aboutToAppear() {
     // 从首选项加载数据
-    if(this.playState.isPlay) {
+    if (this.playState.isPlay) {
       this.animatorResult.play()
     }
     this.animatorResult.onframe = (val) => {
@@ -243,6 +247,7 @@ struct Play {
                   .trackThickness(2)
                   .onChange((val) => {
                     // 拖拽进度
+                    AvPlayerManager.player?.seek(val)
                   })
                 Text(this.number2time(this.playState.duration))
                   .fontSize(12)
@@ -281,6 +286,7 @@ struct Play {
                   .width(30)
                   .onClick(() => {
                     // 上一首
+                    AvPlayerManager.prevPlay()
                   })
 
                 // 播放按钮
@@ -289,6 +295,13 @@ struct Play {
                   .width(50)
                   .onClick(() => {
                     // 如果能点才执行逻辑
+                    if (!this.playState.isPlay) {
+                      AvPlayerManager.singlePlay(this.playState.playList[this.playState.playIndex])
+                      this.animatorResult.play()
+                    } else {
+                      AvPlayerManager.pause()
+                      this.animatorResult.pause()
+                    }
                     // 播放及动画
                   })
                 // 下一首
@@ -297,6 +310,7 @@ struct Play {
                   .width(30)
                   .onClick(() => {
                     // 下一首
+                    AvPlayerManager.nextPlay()
                   })
                 // 播放列表
                 Image($r('app.media.ic_song_list'))
@@ -409,6 +423,7 @@ struct Play {
               }
               .onClick(() => {
                 // 播放
+                AvPlayerManager.singlePlay(item)
               })
               .swipeAction({
                 end: this.deleteButton(index)
