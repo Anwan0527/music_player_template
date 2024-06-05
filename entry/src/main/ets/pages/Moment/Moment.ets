@@ -1,5 +1,6 @@
 import { momentList } from '../../constants/index'
 import { momentListType } from '../../models/index'
+import AvPlayerManager from '../../utils/AvPlayerManger'
 
 @Entry
 @Component
@@ -12,6 +13,7 @@ struct Moment {
       }
       .padding(24)
       .width('100%')
+
       Row() {
         List({ space: 12 }) {
           ForEach(momentList, (item: momentListType) => {
@@ -49,6 +51,7 @@ struct Moment {
                     .alignItems(HorizontalAlign.Start)
                     .justifyContent(FlexAlign.SpaceBetween)
                     .padding(12)
+
                     Image($r("app.media.ic_single_play"))
                       .width(20)
                       .fillColor('#ececec')
@@ -58,8 +61,9 @@ struct Moment {
                   .width('100%')
                   .borderRadius(8)
                   .clip(true)
-                  .onClick(()=>{
-                     // 播放
+                  .onClick(() => {
+                    // 播放
+                    AvPlayerManager.singlePlay(item.song)
                   })
 
                   Row({ space: 20 }) {
@@ -120,7 +124,7 @@ struct Moment {
         }
         .width('100%')
         .height('100%')
-        .padding({ right: 32, left: 16})
+        .padding({ right: 32, left: 16 })
 
       }
       .layoutWeight(1)

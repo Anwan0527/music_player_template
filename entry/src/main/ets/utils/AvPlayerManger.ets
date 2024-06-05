@@ -4,6 +4,11 @@ import { SONG_KEY } from '../constants'
 import { PlayStateType, songItemType } from '../models'
 import { router } from '@kit.ArkUI'
 import AvSessionManager from './AvSessionManager'
+import FormIdManager from './FormIdManager'
+import { formBindingData, formProvider } from '@kit.FormKit'
+import ImageSave from './ImageSave'
+import { fileIo } from '@kit.CoreFileKit'
+import SongManager from './SongManager'
 
 export default class AvPlayerManager {
   //记录当前歌曲静态变量
@@ -23,8 +28,13 @@ export default class AvPlayerManager {
           AvPlayerManager.player?.prepare() //准备
           break;
         case 'prepared':
-          AvPlayerManager.player?.play() //播放
-          AvPlayerManager.currentSong.isPlay = true //播放状态
+          if (AppStorage.get('firstplay') === 1) {
+            //说明上次的直接来播放了//只会进来一次
+            AppStorage.setOrCreate('firstplay', 0)
+          } else {
+            AvPlayerManager.player?.play() //播放
+            AvPlayerManager.currentSong.isPlay = true //播放状态
+          }
           break;
         case 'completed':
           AvPlayerManager.nextPlay(AvPlayerManager.currentSong.playMode === 'repeat')
@@ -80,7 +90,7 @@ export default class AvPlayerManager {
   //切换歌曲
   static async changePlay() {
     //重置播放器状态至初始化，异步方法
-    await AvPlayerManager.player?.reset()
+    await AvPlayerManager.player?.reset() // 重置播放器 会将当前的音乐暂停
     //重置播放器状态
     AvPlayerManager.currentSong.duration = 0
     AvPlayerManager.currentSong.time = 0
@@ -90,6 +100,8 @@ export default class AvPlayerManager {
     AvPlayerManager.currentSong.author =
       AvPlayerManager.currentSong.playList[AvPlayerManager.currentSong.playIndex].author
     AvPlayerManager.currentSong.url = AvPlayerManager.currentSong.playList[AvPlayerManager.currentSong.playIndex].url
+    AvPlayerManager.pushImg() //推送封页
+    SongManager.updateSong(JSON.stringify(AvPlayerManager.currentSong))
   }
 
   //暂停
@@ -157,5 +169,26 @@ export default class AvPlayerManager {
       AvPlayerManager.currentSong.playList.slice(index, 1)
     }
     AppStorage.setOrCreate<PlayStateType>(SONG_KEY, AvPlayerManager.currentSong) // 更新全局状态
+  }
+
+  //切歌推送
+  static async pushImg() {
+    ImageSave.saveFile(AvPlayerManager.currentSong.name + '.jpg', AvPlayerManager.currentSong.img, async (filePath) => {
+      AvPlayerManager.currentSong.cacheImg = filePath
+      const formIdList = FormIdManager.getFormIdList()
+      let fileInfo: Record<string, number> = {} // 定义健值对类型
+      let temFile = fileIo.openSync(AvPlayerManager.currentSong.cacheImg)
+      fileInfo[AvPlayerManager.currentSong.cacheImg!] = temFile.fd
+      const data = formBindingData.createFormBindingData({
+        song: AvPlayerManager.currentSong,
+        fileName: AvPlayerManager.currentSong.cacheImg,
+        formImages: fileInfo
+      })
+      let index = 0
+      while (index < formIdList.length) {
+        await formProvider.updateForm(formIdList[index], data) //更新数据
+        index++
+      }
+    })
   }
 }

@@ -1,6 +1,7 @@
 import { songs } from '../../constants/MusicConstants'
 import { songItemType, songItemTypeModel } from '../../models/music'
 import { PlayStateType } from '../../models/playState'
+import AvPlayerManager from '../../utils/AvPlayerManger'
 
 @Entry
 @Component
@@ -130,7 +131,8 @@ struct SongCard {
             .width('100%')
             .height('100%')
             .justifyContent(FlexAlign.Center)
-            .visibility(this.playState?.url === item.url && this.playState?.isPlay ? Visibility.Visible : Visibility.Hidden)
+            .visibility(this.playState?.url === item.url && this.playState?.isPlay ? Visibility.Visible :
+            Visibility.Hidden)
 
           }
           .width('100%')
@@ -139,7 +141,7 @@ struct SongCard {
           .clip(true)
           .onClick(() => {
             // 播放
-
+            AvPlayerManager.singlePlay(item)
           })
         }
       })

@@ -1,10 +1,11 @@
-
 const localStorage = new LocalStorage()
+
 @Entry(localStorage)
 @Component
 struct WidgetCard {
   @State
   randomColor: string = 'rgb(0,0,0)'
+
   updateState() {
     this.randomColor =
       `rgb(${Math.floor(Math.random() * 255)},${Math.floor(Math.random() * 255)},${Math.floor(Math.random() * 255)})`
@@ -13,6 +14,22 @@ struct WidgetCard {
   // 图片
   @LocalStorageProp('fileName')
   fileName: string = ''
+  //卡片
+  @LocalStorageProp('formId')
+  @Watch('updateFormId')
+  formId: string = ''
+
+  updateFormId() {
+    console.log('formId_card', this.formId)
+    postCardAction(this, {
+      action: 'call',
+      abilityName: 'EntryAbility',
+      params: {
+        method: 'getFormId',
+        formId: this.formId
+      }
+    })
+  }
 
   build() {
     Row() {
@@ -62,6 +79,15 @@ struct WidgetCard {
             .width(30)
             .onClick(() => {
               // 上一首
+              //无法导入AvplayerClass
+              //通知应用切换下一首
+              postCardAction(this, {
+                action: 'call',
+                abilityName: 'EntryAbility',
+                params: {
+                  method: 'prev'
+                }
+              })
             })
           Text("奢香夫人")
             .fontColor(Color.White)
@@ -78,6 +104,14 @@ struct WidgetCard {
             .width(30)
             .onClick(() => {
               // 下一首
+              //同上
+              postCardAction(this, {
+                action: 'call',
+                abilityName: 'EntryAbility',
+                params: {
+                  method: 'next'
+                }
+              })
             })
         }
         .width('100%')

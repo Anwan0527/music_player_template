@@ -1,5 +1,7 @@
 import { songs } from '../../constants/index'
 import { songItemType } from '../../models/index'
+import AvPlayerManager from '../../utils/AvPlayerManger'
+
 @Entry
 @Component
 struct Find {
@@ -10,30 +12,35 @@ struct Find {
       }
       .padding(24)
       .width('100%')
-      Row(){
-        List({space:12}) {
-          ForEach(songs,(item:songItemType,index:number)=>{
+
+      Row() {
+        List({ space: 12 }) {
+          ForEach(songs, (item: songItemType, index: number) => {
             ListItem() {
-              Row({space:12}) {
+              Row({ space: 12 }) {
                 Row() {
                   Image(item.img)
                     .borderRadius(8)
                     .width(60)
                 }
-                Column({space:12}) {
+
+                Column({ space: 12 }) {
                   Text(item.name).fontColor('#e9e9e7')
-                  Row({space:4}){
-                    Text('VIP') .fontSize(10)
+                  Row({ space: 4 }) {
+                    Text('VIP')
+                      .fontSize(10)
                       .padding({
-                        left:6,
-                        right:6,
-                        top:2,
-                        bottom:2
+                        left: 6,
+                        right: 6,
+                        top: 2,
+                        bottom: 2
                       })
                       .border({
-                        width:1,
-                        color:'#c0a267'
-                      }).borderRadius(10).fontColor('#c0a267')
+                        width: 1,
+                        color: '#c0a267'
+                      })
+                      .borderRadius(10)
+                      .fontColor('#c0a267')
                     Text(item.author)
                       .fontColor('#aaa9af')
                       .fontSize(12)
@@ -50,7 +57,7 @@ struct Find {
               }
             }.onClick(() => {
               // 播放
-
+              AvPlayerManager.singlePlay(item)
             })
 
           })
@@ -65,8 +72,8 @@ struct Find {
           }
         }.width('100%').height('100%')
         .padding({
-          left:24,
-          right:24
+          left: 24,
+          right: 24
         })
       }
       .layoutWeight(1)
