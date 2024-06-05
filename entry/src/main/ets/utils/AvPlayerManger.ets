@@ -159,6 +159,9 @@ export default class AvPlayerManager {
       } else {
         await AvPlayerManager.player?.reset()
         AvPlayerManager.currentSong = new PlayStateType() //重置数据
+        // AlertDialog.show({
+        //   message: JSON.stringify(AvPlayerManager.currentSong, null, 2)
+        // })
         router.back()
       }
     } else {
@@ -166,7 +169,10 @@ export default class AvPlayerManager {
       if (AvPlayerManager.currentSong.playIndex > index) {
         AvPlayerManager.currentSong.playIndex--
       }
-      AvPlayerManager.currentSong.playList.slice(index, 1)
+      AvPlayerManager.currentSong.playList.splice(index, 1)
+      // AlertDialog.show({
+      //   message: JSON.stringify(AvPlayerManager.currentSong, null, 2)
+      // })
     }
     AppStorage.setOrCreate<PlayStateType>(SONG_KEY, AvPlayerManager.currentSong) // 更新全局状态
   }
